@@ -27,19 +27,19 @@ def dfs(node_index):
     active[node_index] = True #upon first call the node is currently being visited
     for destination in adjacency_list[node_index]:
         if not used[destination]: #a new node
-            if dfs(destination): #recursively searches for cycles on freshly discovered destination nodes
-                if begin_cycle!=-1:
-                    cycle.insert(0, node_index)
-                if begin_cycle==node_index:
-                    begin_cycle=-1
+            if dfs(destination): #finds cycle recursively from freshly discovered destination nodes
+                if begin_cycle!=-1: #in a cycle but we haven't come back to the beginning of it
+                    cycle.insert(0, node_index) #add to array tracking cycle nodes
+                if begin_cycle==node_index: #returned to cycle origin
+                    begin_cycle=-1 #don't double add cycle origin to array, reset
                 return True
         else:
-            if active[destination]: #a cycle is found when we stumble upon the node originally being examined
-                begin_cycle = destination
-                cycle.insert(0,node_index)
+            if active[destination]: #a cycle is found when we stumble upon a node currently in stack being examined
+                begin_cycle = destination #this active node begins the cycle
+                cycle.insert(0,node_index) #insert since recursive calls return tracked nodes in reverse cycle order
                 return True
     active[node_index] = False #exiting node visitation
-    stack.append(node_index) #recursive calls return reverse order of topological nodes
+    stack.append(node_index) #end of calls return reverse topological order of nodes
     return False
 
 def has_cycle():
