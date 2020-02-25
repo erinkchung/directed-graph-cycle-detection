@@ -1,5 +1,6 @@
 import sys
 sys.setrecursionlimit(10**6)
+#if graph cyclic prints cycle in graph, otherwise prints topological order of nodes
 
 info = sys.stdin.readlines()
 num_nodes = int(info[0].split()[0]) #store number of nodes
@@ -44,7 +45,7 @@ def dfs(node_index):
 
 def has_cycle():
     for i in range(num_nodes):
-        if not used[i]:
+        if not used[i]: #makes a call to dfs() for an origin node, more if sub-graphs are not connected
             if dfs(i):
                 return True
     return False
